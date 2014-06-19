@@ -1,0 +1,4 @@
+name: venti
+version: 0.0.0
+author: Paul VanKeuren <paul.vankeuren@gmail.com>
+description: A dart package for routing, filtering, and creating arbitrary data, called events.
