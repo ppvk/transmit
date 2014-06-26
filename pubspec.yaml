@@ -1,6 +1,8 @@
-name: venti
-version: 0.0.0
+name: pump
+version: 0.0.1
 author: Paul VanKeuren <paul.vankeuren@gmail.com>
-description: A dart package for routing, filtering, and creating arbitrary data, called events.
+description: |-
+  A dart package for the Pump class.
+  Allows for the pumping and filtering of events using a publish subscribe model.
 dev_dependencies:
   browser: any

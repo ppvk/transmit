@@ -1,4 +1,5 @@
 venti
 =====
 
-A dart package for routing, filtering, and creating arbitrary data, called events.
+A dart package for the Pump class.
+Allows for the pumping, filtering, and transformation of events using a publish/subscribe model.
