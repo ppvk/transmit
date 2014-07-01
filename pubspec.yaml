@@ -1,5 +1,5 @@
 name: pump
-version: 0.0.1
+version: 0.0.2
 author: Paul VanKeuren <paul.vankeuren@gmail.com>
 description: |-
   A dart package for the Pump class.

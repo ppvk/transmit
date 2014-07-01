@@ -32,6 +32,10 @@ class Pump {
   operator <(Pump other) { // Shorthand
     listen(other);
   }
+  /// equivalent to saying 'other.listen(this)'
+  operator >(Pump other) { // Shorthand
+    other.listen(this);
+  }
   /// lets both parties subscribe to each other, Should override process to stop loops.
   operator &(Pump other) {// Shorthand
     listen(other);
