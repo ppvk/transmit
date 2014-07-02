@@ -23,17 +23,22 @@ class Pump {
   operator +(event) { // Shorthand for publish
     publish(event);
   }
-  /// Detects the events emitted by the 'other' EventRouter
-  listen(Pump other) {
-    other._listeners.add(this);
-    other.events.listen((event) => publish(process(event))); // Emit the processed event
+  /// Detects the events emitted by the 'other'
+  listen(other) {
+    if (other is Pump) {
+      other._listeners.add(this);
+      other.events.listen((event) => publish(process(event))); // Emit the processed event
+    }
+    else if (other is Stream) {
+      other.listen((event) => publish(process(event)));  
+    }
   }
   /// equivalent to saying 'listen(other)'
-  operator <(Pump other) { // Shorthand
+  operator <(other) { // Shorthand
     listen(other);
   }
   /// equivalent to saying 'other.listen(this)'
-  operator >(Pump other) { // Shorthand
+  operator >(other) { // Shorthand
     other.listen(this);
   }
   /// lets both parties subscribe to each other, Should override process to stop loops.
