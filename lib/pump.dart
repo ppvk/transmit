@@ -19,7 +19,7 @@ class Pump {
     if (event != null && listeners > 0)
       _internal.add(event);
   }
-  /// Adds an event to the Router, equivalent to saying 'publish(event)'
+  /// Adds an event to the Pump, equivalent to saying 'publish(event)'
   operator +(event) { // Shorthand for publish
     publish(event);
   }
