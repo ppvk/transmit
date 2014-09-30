@@ -1,5 +1,5 @@
 name: pump
-version: 0.1.3
+version: 0.1.0
 author: Paul VanKeuren <paul.vankeuren@gmail.com>
 description: A dart package that allows for the creation of event-like objects, and the Services that consume them.
 dev_dependencies:
