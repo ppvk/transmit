@@ -1,53 +1,54 @@
 library pump;
 import 'dart:async';
 
-/**
- *  Pumps direct traffic among themselves.
- *  It publishes everyting it hears. Can funciton as an event bus.
- *  override the 'process' method to modify the returned data.
-*/
-class Pump {
-  // Stream Management
-  StreamController _internal = new StreamController.broadcast();
-  Stream get events => _internal.stream;
-  List _listeners = [];
-  int get listeners =>_listeners.length;
-  
-  
-  /// publishes an event to the internal stream, which is detected by anyone listening to this object.
-  publish(event) {
-    if (event != null && listeners > 0)
-      _internal.add(event);
+// Stream Management
+StreamController _pump = new StreamController.broadcast();
+
+trigger(Symbol type, content) {
+  new Moment(type, content);
+}
+
+/// A [Moment] is a particular event that is noticed by every active [Service]
+/// It has a type in the form of a [Symbol], and a [content].
+class Moment<T> {
+  Symbol type;
+  T content;
+  bool detected = false;
+  Moment(this.type, this.content) {
+    _pump.add(this);
+    // After 3 seconds consume the event and print a warning.
+    new Timer(new Duration(seconds: 3), () {
+      if (detected == false) {
+        new Moment(#err, '${type.toString().replaceAll('Symbol', 'Moment')} not Consumed!');
+        this.detected = true;
+      }
+    });
   }
-  /// Adds an event to the Pump, equivalent to saying 'publish(event)'
-  operator +(event) { // Shorthand for publish
-    publish(event);
+
+  /// Checks to see if the event is the proper type, automatically flags it as [detected] if so.
+  isType(Symbol type) {
+    if (this.type == type) {
+      this.detected = true;
+      return true;
+    } else return false;
   }
-  /// Detects the events emitted by the 'other'
-  listen(other) {
-    if (other is Pump) {
-      other._listeners.add(this);
-      other.events.listen((event) => publish(process(event))); // Emit the processed event
-    }
-    else if (other is Stream) {
-      other.listen((event) => publish(process(event)));  
-    }
-  }
-  /// equivalent to saying 'listen(other)'
-  operator <(other) { // Shorthand
-    listen(other);
-  }
-  /// equivalent to saying 'other.listen(this)'
-  operator >(other) { // Shorthand
-    other.listen(this);
-  }
-  /// lets both parties subscribe to each other, Should override process to stop loops.
-  operator &(Pump other) {// Shorthand
-    listen(other);
-    other.listen(this);
-  }
-  /// Processes the event before it's added to the internal stream.
-  process(event) {
-    return event; // By default, no processing is actually done
+
+  @override
+  toString() {
+    return '${type.toString().replaceAll('Symbol', 'Moment')} => $content';
   }
 }
+
+class Service {
+  Service(Function processor) {
+    _pump.stream.listen((Moment event) {
+      processor(event);
+    });
+  }
+}
+
+/// [errService] prints out the content of any [Moment] typed #err
+Service errService = new Service((Moment event) {
+  if (event.isType(#err)) print('err: ${event.content}');
+  return;
+});
