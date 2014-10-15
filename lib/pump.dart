@@ -1,54 +1,38 @@
 library pump;
 import 'dart:async';
 
-// Stream Management
-StreamController _pump = new StreamController.broadcast();
+StreamController _eventBus = new StreamController.broadcast();
 
-trigger(Symbol type, content) {
-  new Moment(type, content);
-}
+/// A [Message] is automatically sent to every [Service]
+/// It has a [type] in the form of a [Symbol], and some [content].
+class Message<T> {
 
-/// A [Moment] is a particular event that is noticed by every active [Service]
-/// It has a type in the form of a [Symbol], and a [content].
-class Moment<T> {
   Symbol type;
   T content;
   bool detected = false;
-  Moment(this.type, this.content) {
-    _pump.add(this);
-    // After 3 seconds consume the event and print a warning.
+
+  Message(this.type, this.content) {
+    _eventBus.add(this);
+    // After 3 seconds, if the message hasn't been recieved, alert us with an #err Message.
     new Timer(new Duration(seconds: 3), () {
       if (detected == false) {
-        new Moment(#err, '${type.toString().replaceAll('Symbol', 'Moment')} not Consumed!');
+        new Message(#err, 'Message containing, "${this.content}" not Consumed!');
         this.detected = true;
       }
     });
   }
 
-  /// Checks to see if the event is the proper type, automatically flags it as [detected] if so.
-  isType(Symbol type) {
-    if (this.type == type) {
-      this.detected = true;
-      return true;
-    } else return false;
-  }
-
-  @override
-  toString() {
-    return '${type.toString().replaceAll('Symbol', 'Moment')} => $content';
-  }
 }
 
+
+/// A [Service] reacts to every [Message], triggering a processor [Function] on it.
 class Service {
-  Service(Function processor) {
-    _pump.stream.listen((Moment event) {
+  Service(List<Symbol> types, Function processor) {
+    _eventBus.stream.takeWhile((Message thisMessage) {
+      return types.contains(thisMessage.type);
+    }).listen((Message event) {
+      event.detected = true;
       processor(event);
     });
   }
 }
-
-/// [errService] prints out the content of any [Moment] typed #err
-Service errService = new Service((Moment event) {
-  if (event.isType(#err)) print('err: ${event.content}');
-  return;
-});
