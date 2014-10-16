@@ -28,7 +28,7 @@ class Message<T> {
 /// A [Service] reacts to every [Message], triggering a processor [Function] on it.
 class Service {
   Service(List<Symbol> types, Function processor) {
-    _eventBus.stream.takeWhile((Message thisMessage) {
+    _eventBus.stream.where((Message thisMessage) {
       return types.contains(thisMessage.type);
     }).listen((Message event) {
       event.detected = true;
