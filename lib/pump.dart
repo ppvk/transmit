@@ -4,10 +4,10 @@ import 'dart:async';
 StreamController _eventBus = new StreamController.broadcast();
 
 /// A [Message] is automatically sent to every [Service]
-/// It has a [type] in the form of a [Symbol], and some [content].
+/// It has a [type] which can be anything, and some [content].
 class Message<T> {
 
-  Symbol type;
+  var type;
   T content;
   bool detected = false;
 
@@ -27,12 +27,12 @@ class Message<T> {
 
 /// A [Service] reacts to every [Message], triggering a processor [Function] on it.
 class Service {
-  Service(List<Symbol> types, Function processor) {
+  Service(List types, Function target) {
     _eventBus.stream.where((Message thisMessage) {
       return types.contains(thisMessage.type);
     }).listen((Message event) {
       event.detected = true;
-      processor(event);
+      target(event);
     });
   }
 }
