@@ -1,38 +1,23 @@
 library pump;
 import 'dart:async';
+import 'dart:html';
+import 'dart:js';
 
-StreamController _eventBus = new StreamController.broadcast();
-
-/// A [Message] is automatically sent to every [Service]
-/// It has a [type] which can be anything, and some [content].
-class Message<T> {
-
-  var type;
-  T content;
-  bool detected = false;
-
-  Message(this.type, this.content) {
-    _eventBus.add(this);
-    // After 3 seconds, if the message hasn't been recieved, alert us with an #err Message.
-    new Timer(new Duration(seconds: 3), () {
-      if (detected == false) {
-        new Message(#err, 'Message containing, "${this.content}" not Consumed!');
-        this.detected = true;
-      }
-    });
-  }
-
+/// fire a message and trigger activated services.
+pump(String type, var content) {
+  var event = new CustomEvent('PUMP_' + type, detail: content);
+  document.dispatchEvent(event);
 }
 
+// for your dart:js callbacks
+JsFunction get jsPump => context['pump'];
 
-/// A [Service] reacts to every [Message], triggering a processor [Function] on it.
+/// A [Service] reacts to every pumped message of type in [types]
 class Service {
   Service(List types, Function target) {
-    _eventBus.stream.where((Message thisMessage) {
-      return types.contains(thisMessage.type);
-    }).listen((Message event) {
-      event.detected = true;
-      target(event);
-    });
+    for (String type in types) {
+      document.addEventListener('PUMP_' + type,
+          (CustomEvent event) => target(event.detail));
+    }
   }
 }
