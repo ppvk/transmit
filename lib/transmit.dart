@@ -1,10 +1,10 @@
-library pump;
+library transmit;
 import 'dart:async';
 import 'dart:html';
 import 'dart:js';
 
 /// fire a message and trigger activated services.
-pump(String type, var content) {
+transmit(String type, var content) {
   var event = new CustomEvent('PUMP_' + type, detail: content);
   document.dispatchEvent(event);
 }
@@ -12,7 +12,7 @@ pump(String type, var content) {
 // for your dart:js callbacks
 JsFunction get jsPump => context['pump'];
 
-/// A [Service] reacts to every pumped message of type in [types]
+/// A [Service] reacts to every message transmitted of type in [types]
 class Service {
   Service(List types, Function target) {
     for (String type in types) {
