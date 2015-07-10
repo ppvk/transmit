@@ -10,11 +10,11 @@ transmit(String type, var content) {
 }
 
 // for your dart:js callbacks
-JsFunction get jsPump => context['pump'];
+JsFunction get jsTransmit => context['transmit'];
 
 /// A [Service] reacts to every message transmitted of type in [types]
 class Service {
-  Service(List types, Function target) {
+  Service(List<String> types, Function target) {
     for (String type in types) {
       document.addEventListener('PUMP_' + type,
           (CustomEvent event) => target(event.detail));

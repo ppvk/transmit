@@ -3,12 +3,11 @@
 A very simple global message-passing library for dart/js interop, based on custom events.
 
 ###API
-a `Service` receives all messages created by `transmit` with a matching `type`
+a `Service` receives all messages created by a following `transmit` with a matching `type`
 
     Service(List types, Function target);
 
     transmit(String type, var content);
-
 
 ### Example
 
