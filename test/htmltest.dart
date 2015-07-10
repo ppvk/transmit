@@ -1,11 +1,12 @@
-import 'package:pump/pump.dart';
+import 'package:transmit/transmit.dart';
 
 main() {
   new Service(['printer'], print);
 
 
-  pump('printer', 'dartworld');
+  transmit('printer', 'dartworld');
+  jsTransmit.apply(['printer', 'dart:js world']);
 
-  jsPump.apply(['printer', 'dart:js world']);
+
 
 }
