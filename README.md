@@ -5,7 +5,7 @@ A very simple global message-passing library for dart/js interop, based on custo
 ###API
 a `Service` receives all messages created by a following `transmit` with a matching `type`
 
-    Service(List types, Function target);
+    Service(List<String> types, Function target);
 
     transmit(String type, var content);
 
