@@ -1,14 +1,13 @@
-# Pump
+# Transmit
 
-A simple global message-passing library.
+A very simple global message-passing library for dart/js interop, based on custom events.
 
 ###API
-a `Service` receives all `Messages` created after it with a matching `type`
+a `Service` receives all messages created by a following `transmit` with a matching `type`
 
-    Service(var type, Function target);
+    Service(List<String> types, Function target);
 
-    Message(List types, var content);
-
+    transmit(String type, var content);
 
 ### Example
 
@@ -17,16 +16,16 @@ a `Service` receives all `Messages` created after it with a matching `type`
       new Service(['attack'], waterGun);
 
       // Messages trigger services that contain their types.
-      new Message('pokemon', 'Squirtle');
+      transmit('pokemon', 'Squirtle');
         // => I choose you Squirtle!
-      new Message('attack', 'Squirtle');
+      transmit('attack', 'Squirtle');
         // => Squirtle used Water Gun!
     }
 
-    waterGun(Message m) {
-      print('${m.content} used Water Gun!');
+    waterGun(content) {
+      print('${content} used Water Gun!');
     }
 
-    choose(Message m) {
-      print('I choose you ${m.content}!');
+    choose(content) {
+      print('I choose you ${content}!');
     }
