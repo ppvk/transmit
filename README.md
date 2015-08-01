@@ -1,8 +1,9 @@
 # Transmit
 
 A very simple global message-passing library for dart/js interop, based on custom events.
+It's particularly useful as a two way communication system between dart and Js contexts.
 
-###API
+### Dart API
 a `Service` receives all messages created by a following `transmit` with a matching `type`
 
     Service(List<String> types, Function target);
@@ -29,3 +30,8 @@ a `Service` receives all messages created by a following `transmit` with a match
     choose(content) {
       print('I choose you ${content}!');
     }
+
+### JS API
+    
+    transmit(String type, content);
+    
