@@ -16,13 +16,23 @@ JsFunction get jsTransmit => context['transmit'];
 
 /// A [Service] reacts to every message transmitted of type in [types]
 class Service {
-  Function callback;
+	Function callback;
+	bool enabled = false;
 
-  Service(final List channels, this.callback) {
-    for (var channel in channels) {
-      if (!(channel is String) && !(channel is int)) throw('channel must be a String or and int');
-      document.addEventListener('PUMP_' + channel.toString(),
-          (CustomEvent event) => callback(event.detail));
-    }
-  }
+	Service(final List channels, this.callback) {
+		for (var channel in channels) {
+			if (!(channel is String) && !(channel is int)) throw('channel must be a String or and int');
+			document.addEventListener('PUMP_' + channel.toString(),
+				(CustomEvent event) {
+				if (enabled) {
+					callback(event.detail);
+				}
+			});
+		}
+		enabled = true;
+	}
+
+	cancel() {
+		enabled = false;
+	}
 }
