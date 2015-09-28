@@ -1,5 +1,5 @@
 name: transmit
-version: 1.1.0
+version: 1.1.5
 author: Paul VanKeuren <paul.vankeuren@gmail.com>
 description: A dart package that allows for quick event passing between distinct parts of your codebase.
 dev_dependencies:
