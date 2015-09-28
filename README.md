@@ -3,7 +3,7 @@
 A very simple global message-passing library for dart/js interop, based on custom events.
 It's particularly useful as a two way communication system between dart and Js contexts.
 
-### Dart API
+## Dart API
 a `Service` receives all messages created by a following `transmit` with a matching `type`
 
 ```dart
@@ -73,7 +73,7 @@ void stopListening() {
 }
 ```
 
-### JS API
+## JS API
 
 ```javascript
 transmit(String type, content);
