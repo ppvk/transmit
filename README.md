@@ -6,9 +6,11 @@ It's particularly useful as a two way communication system between dart and Js c
 ### Dart API
 a `Service` receives all messages created by a following `transmit` with a matching `type`
 
-    Service(List<String> types, Function target);
+```dart
+Service(List<String> types, Function target);
 
-    transmit(String type, var content);
+transmit(String type, var content);
+```
 
 ### Example
 
